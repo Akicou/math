@@ -1,4 +1,4 @@
-import { roundTo } from "./utils.ts";
+import { gcdBruteForce, roundTo } from "./utils.ts";
 
 export class Fraction {
   constructor(
@@ -8,6 +8,13 @@ export class Fraction {
     if (denominator === 0) {
       throw new Error("denominator cannot be zero");
     }
+    this.cancel();
+  }
+
+  public cancel(): void {
+    const gcd = gcdBruteForce(Math.abs(this.numerator), Math.abs(this.denominator));
+    this.numerator = this.numerator / gcd;
+    this.denominator = this.denominator / gcd;
   }
 
   public add(other: Fraction) {

@@ -45,3 +45,25 @@ Deno.test("constructor and parse with zero denominator throw error", () => {
   assertThrows(() => new Fraction(3, 0));
   assertThrows(() => Fraction.parse("3/0"));
 });
+
+Deno.test("cancel trivial fraction stays unchanged", () => {
+  const f = new Fraction(1, 3);
+  f.cancel();
+  assertEquals(f.toString(), "1/3");
+});
+
+Deno.test("cancel reduces fraction", () => {
+  const f = new Fraction(2, 3); // already reduced by constructor
+  f.cancel();
+  assertEquals(f.toString(), "2/3");
+});
+
+Deno.test("fraction auto-cancels on construction", () => {
+  assertEquals(new Fraction(6, 9).toString(), "2/3");
+  assertEquals(new Fraction(4, 8).toString(), "1/2");
+  assertEquals(new Fraction(10, 5).toString(), "2/1");
+});
+
+Deno.test("parse auto-cancels fraction", () => {
+  assertEquals(Fraction.parse("6/9").toString(), "2/3");
+});
